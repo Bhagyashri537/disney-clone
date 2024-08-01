@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
-const ImgUrl = 'https://image.tmdb.org/t/p/w500'
+const ImgUrl = 'https://image.tmdb.org/t/p/w500';
+const screenWidth=window.innerWidth;
 
 const Slider = () => {
   const [movies, setMovies] = useState([]);
- 
+  const elementRef = useRef();
 
   useEffect(() => {
     getMovies();
@@ -33,17 +35,27 @@ const Slider = () => {
     }
   };
 
+  const sliderRight = (element) => {
+    element.scrollLeft+=screenWidth-110
+  }
+  const sliderLeft = (element) => {
+    element.scrollLeft-=screenWidth-110
+  }
+
   return (
-    
-      <div className="flex overflow-x-auto w-full px-16 py-4">
+     <div>
+      <HiChevronLeft onClick={()=>sliderLeft(elementRef.current)}  className='hidden md:block scroll-smooth text-white text-[30px] absolute mx-8 mt-[150px] cursor-pointer'/>
+      <HiChevronRight onClick={()=>sliderRight(elementRef.current)} className='hidden md:block scroll-smooth text-white text-[30px] absolute mx-8 mt-[150px] cursor-pointer right-0'/>
+      <div ref={elementRef} className="flex overflow-x-auto w-full px-16 py-4 scrollbar-none">
         {movies.map(movie => (
           
-            <img src={ImgUrl+movie.backdrop_path} className='min-w-full h-[310px]  object-contain object-left-top mr-5'/>
+            <img src={ImgUrl+movie.backdrop_path} className='min-w-full md:h-[310px]  object-cover object-left-top mr-5 hover:border-2 border-gray-300 rounded-md transition-all duration-100 ease-in-out'/>
            
             
            
          
         ))}
+      </div>
       </div>
     
   );
